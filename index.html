@@ -31,7 +31,8 @@
           class="search h-[50px] px-[30px] rounded-[15px] flex gap-x-[20px] justify-around items-center bg-[#1E1E1E] my-[10px]">
           <img src="./image/class.svg" alt="" />
           <input
-            class="w-[100%] h-[100%] border-none outline-none bg-[#1E1E1E]"
+            class="w-[100%] h-[100%] border-none outline-none bg-[#1E1E1E] text-[#fff]"
+            id="search"
             type="text"
             placeholder="Seacrh City" />
         </div>
@@ -66,7 +67,7 @@
         <div class="text-sm space-y-2">
           <p class="text-[#fff]">
             Цаг Агаарын Байдал:
-            <span class="font-medium text-[#fff]">Үүлэрхэг</span>
+            <span class="font-medium text-[#fff]" id="condition">Үүлэрхэг</span>
           </p>
           <p class="text-[#fff]">
             Агаарын Чийгшил: <span class="font-medium text-[#fff]">51%</span>
@@ -84,26 +85,62 @@
           </div>
         </div>
       </div>
+      <div class="py-[40px] flex gap-x-[20px]">
+        <div
+          class="flex flex-col items-center justify-between w-24 h-48 p-4 bg-[#1E1E1E] rounded-2xl text-white shadow-md">
+          <!-- Day -->
+          <h3 class="text-lg font-semibold">SAT</h3>
+          <!-- Weather Icon -->
+          <img
+            src="https://via.placeholder.com/50x50"
+            alt="Weather Icon"
+            class="w-12 h-12" />
+          <!-- Temperature -->
+          <p class="text-3xl font-bold">10°</p>
+        </div>
+        <div
+          class="flex flex-col items-center justify-between w-24 h-48 p-4 bg-[#1E1E1E] rounded-2xl text-white shadow-md">
+          <!-- Day -->
+          <h3 class="text-lg font-semibold">SAT</h3>
+          <!-- Weather Icon -->
+          <img
+            src="https://via.placeholder.com/50x50"
+            alt="Weather Icon"
+            class="w-12 h-12" />
+          <!-- Temperature -->
+          <p class="text-3xl font-bold">10°</p>
+        </div>
+      </div>
     </main>
 
     <script>
-      let getData = async () => {
-        let res = await fetch(
-          `http://api.weatherstack.com/current?access_key=0e6b717a2efbb2aea5bfeb5679fbb056&query=New York`
-        );
+      let APIKey = "df4a1a326ca0a4db6052182989781905";
+      let currentWeatherAPI = "https://api.openweathermap.org/data/2.5/weather";
+      let foreCastURL =
+        "https://pro.openweathermap.org/data/2.5/forecast/climate";
+
+      let getData = async (city) => {
+        let res = await fetch(`${currentWeatherAPI}?q=${city}&appid=${APIKey}`);
         let data = await res.json();
         // console.log(data);
         return data;
       };
-      getData();
-      let currentDay = async () => {
+
+      let searchCity = document.querySelector("#search");
+      searchCity.addEventListener("keydown", async (e) => {
+        let data = await getData(e.target.value);
+        currentDay(data);
+      });
+
+      let currentDay = (data) => {
         let temp = document.querySelector("#temperature");
-        let currentData = await getData();
-        // console.log(currentData.current);
-        temp.innerHTML = currentData.current.temperature;
+        let description = document.querySelector("#condition");
+
+        console.log(data);
+        temp.innerHTML = data.main.temp;
+        description.innerText = data.weather[0].description;
       };
 
-      currentDay();
       function toggleTemperature() {
         const toggle = document.getElementById("toggle");
         const slider = document.getElementById("slider");
