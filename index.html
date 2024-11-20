@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+  </head>
+  <body class="bg-[black]">
+    <header class="w-[100%] bg-[black] border-b-2 border-[#39393A]">
+      <nav class="mx-[80px] flex justify-between items-center">
+        <div class="left-info">
+          <ul class="flex gap-x-[10px]">
+            <li
+              class="w-[40px] h-[40px] rounded-[50%] bg-[#1E1E1E] flex justify-center items-center my-[10px]">
+              <img src="./image/solar_bell-broken.svg" alt="" />
+            </li>
+            <li>
+              <div
+                class="location flex justify-center items-center gap-x-[2px]">
+                <div
+                  class="icon w-[40px] h-[40px] rounded-[50%] bg-[#1E1E1E] flex justify-center items-center my-[10px]">
+                  <img src="./image/Vector.svg" alt="" />
+                </div>
+                <p class="text-[#fff]">Darkhan Mongolia</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div
+          class="search h-[50px] px-[30px] rounded-[15px] flex gap-x-[20px] justify-around items-center bg-[#1E1E1E] my-[10px]">
+          <img src="./image/class.svg" alt="" />
+          <input
+            class="w-[100%] h-[100%] border-none outline-none bg-[#1E1E1E]"
+            type="text"
+            placeholder="Seacrh City" />
+        </div>
+        <div
+          class="relative flex items-center justify-between w-20 h-10 px-2 bg-[#1E1E1E] rounded-full cursor-pointer"
+          id="toggle"
+          onclick="toggleTemperature()">
+          <span class="text-gray-400 text-sm font-medium" id="fahrenheit"
+            >°F</span
+          >
+          <span class="text-gray-400 text-sm font-medium" id="celsius">°C</span>
+          <div
+            class="absolute w-8 h-8 bg-gray-600 rounded-full transition-transform transform"
+            id="slider"></div>
+        </div>
+      </nav>
+    </header>
+    <main class="m-[80px]">
+      <div class="w-full max-w-md p-6 bg-[#1E1E1E] rounded-lg shadow-lg mt">
+        <div
+          class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
+          <h2 class="text-lg font-semibold text-[#fff]">Нэгдэх Өдөр</h2>
+          <span class="text-sm font-medium text-[#fff]">16:14 PM</span>
+        </div>
+        <div class="flex justify-between items-center mb-4">
+          <div class="text-6xl font-bold text-[#fff]" id="temperature">36°</div>
+          <img
+            src="./image/Sunnny Windy Icon 1.svg"
+            alt="Weather Icon"
+            class="w-12 h-12" />
+        </div>
+        <div class="text-sm space-y-2">
+          <p class="text-[#fff]">
+            Цаг Агаарын Байдал:
+            <span class="font-medium text-[#fff]">Үүлэрхэг</span>
+          </p>
+          <p class="text-[#fff]">
+            Агаарын Чийгшил: <span class="font-medium text-[#fff]">51%</span>
+          </p>
+          <p class="text-[#fff]">
+            Салхины Хурд: <span class="font-medium text-[#fff]">100MB</span>
+          </p>
+          <div class="flex justify-between">
+            <p class="text-[#fff]">
+              Нар Мандах: <span class="font-medium text-[#fff]">07:00</span>
+            </p>
+            <p class="text-[#fff]">
+              Нар Жаргах: <span class="font-medium text-[#fff]">18:30</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      let getData = async () => {
+        let res = await fetch(
+          `http://api.weatherstack.com/current?access_key=0e6b717a2efbb2aea5bfeb5679fbb056&query=New York`
+        );
+        let data = await res.json();
+        // console.log(data);
+        return data;
+      };
+      getData();
+      let currentDay = async () => {
+        let temp = document.querySelector("#temperature");
+        let currentData = await getData();
+        // console.log(currentData.current);
+        temp.innerHTML = currentData.current.temperature;
+      };
+
+      currentDay();
+      function toggleTemperature() {
+        const toggle = document.getElementById("toggle");
+        const slider = document.getElementById("slider");
+        const fahrenheit = document.getElementById("fahrenheit");
+        const celsius = document.getElementById("celsius");
+
+        // Toggle styles and slider position
+        if (slider.style.transform === "translateX(40px)") {
+          slider.style.transform = "translateX(0px)";
+          fahrenheit.classList.replace("text-gray-400", "text-white");
+          celsius.classList.replace("text-white", "text-gray-400");
+        } else {
+          slider.style.transform = "translateX(40px)";
+          fahrenheit.classList.replace("text-white", "text-gray-400");
+          celsius.classList.replace("text-gray-400", "text-white");
+        }
+      }
+
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              clifford: "#da373d",
+            },
+          },
+        },
+      };
+    </script>
+  </body>
+</html>
